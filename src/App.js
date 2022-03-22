@@ -9,12 +9,8 @@ function App() {
 
     return (
         <div className="App">
-            {/* Shrinks the popup when there is no winner */}
-            {/* Custom made board component comprising of 
-            the tic-tac-toe board  */}
             {/* <Board /> */}
             <Quiz/>
-            {/* <Info /> */}
         </div>
     );
 }
