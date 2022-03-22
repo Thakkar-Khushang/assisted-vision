@@ -1,0 +1,31 @@
+*{
+    -webkit-box-sizing: border-box; 
+    -moz-box-sizing: border-box;    
+    box-sizing: border-box;  
+  }
+  
+  body {
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+.App{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 5vh;
+    backdrop-filter: 5px;
+    background-color: #101010;
+}
+
+
+
+@media (min-width: 768px) {
+    button {
+    padding: .75rem 1.5rem;
+    }
+};
