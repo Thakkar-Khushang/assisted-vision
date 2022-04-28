@@ -22,7 +22,8 @@ const Landing = () => {
         switch (value) {
             case "1":
                 case "detect object":
-                    
+                    navigate('/detection');
+                    stop();
                 break;
             case "give exam":
                     navigate('/quiz');

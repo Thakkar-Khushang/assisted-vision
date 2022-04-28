@@ -58,6 +58,7 @@ const Board = () => {
                 break;
             case "stop":
                 stop();
+                speak({text:"Stopping"});
                 break;
             case "reset":
                 setReset(true);

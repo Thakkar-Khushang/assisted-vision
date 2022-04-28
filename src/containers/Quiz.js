@@ -17,10 +17,11 @@ const Quiz = () =>{
         },
     });
 
-    const selectAnswer = (i) => {
+    const selectAnswer = async (i) => {
         let arr = [...selected]
         let option = questions[question].options[i];
         arr[question] = option;
+        await speak({text: "Selected " + option, queue: false});
         setSelected(arr);
     }
 
@@ -81,22 +82,18 @@ const Quiz = () =>{
 
             case "select option 1":
                 selectAnswer(0);
-                speak({text: "Selected", queue: false});
                 break;
 
             case "select option 2":
                 selectAnswer(1);
-                speak({text: "Selected", queue: false});
                 break;
 
             case "select option 3":
                 selectAnswer(2);
-                speak({text: "Selected", queue: false});
                 break;
 
             case "select option 4":
                 selectAnswer(3);
-                speak({text: "Selected", queue: false});
                 break;
 
             case "read selected option":
@@ -105,7 +102,16 @@ const Quiz = () =>{
                 break;
 
             case "read all selected options":
-                speak({text: selected.join(", "), queue: false});
+                for(let i=0; i<selected.length; i++){
+                    const option = selected[i]
+                    speak({text: "Question: " + questions[i].question, queue: true});
+                    speak({text: option!="" ? "Option selected: " + option:"No option selected", queue: true});
+                }
+                break;
+
+            case "stop":
+                stop();
+                speak({text: "Stopped", queue: false});
                 break;
 
             default:
