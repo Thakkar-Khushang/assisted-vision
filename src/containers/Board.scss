@@ -3,19 +3,26 @@
     --border-color: #FFF;
     --border-thickness: 5px;
 }
-
 .board-container{
     min-height: 65%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 5vh;
+    backdrop-filter: 5px;
 }
 
 .board{
-    width: 30vw;
     height: 90%;
     background-color: var(--board-background);
-    display: flex;
-    align-items: flex-start;
-    flex-direction: row;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    .input{
+      height: 100px;
+      width: 100px;
+    }
+    
 }
 
 .speech-button{
@@ -72,7 +79,6 @@ button {
     color: #FFFFFF;
     cursor: pointer;
     flex: 0 0 auto;
-    font-family: "Inter var";
     font-size: 1.125rem;
     font-weight: 600;
     line-height: 1.5rem;
@@ -114,48 +120,48 @@ button:focus {
 
 .input-1{
     border-right: var(--border-thickness) 
-      dashed var(--border-color);
+      solid var(--border-color);
     border-bottom: var(--border-thickness) 
-      dashed var(--border-color);
+    solid var(--border-color);
 }
 
 .input-2{
     border-right: var(--border-thickness) 
-      dashed var(--border-color);
+    solid var(--border-color);
     border-bottom: var(--border-thickness) 
-      dashed var(--border-color);
+    solid var(--border-color);
 }
 
 .input-3{
     border-bottom: var(--border-thickness) 
-      dashed var(--border-color);
+    solid var(--border-color);
 }
 
 .input-4{
     border-right: var(--border-thickness) 
-      dashed var(--border-color);
+    solid var(--border-color);
     border-bottom: var(--border-thickness) 
-      dashed var(--border-color);
+    solid var(--border-color);
 }
 
 .input-5{
     border-right: var(--border-thickness) 
-      dashed var(--border-color);
+    solid var(--border-color);
     border-bottom: var(--border-thickness) 
-      dashed var(--border-color);
+    solid var(--border-color);
 }
 
 .input-6{
     border-bottom: var(--border-thickness) 
-      dashed var(--border-color);
+    solid var(--border-color);
 }
 
 .input-7{
     border-right: var(--border-thickness) 
-      dashed var(--border-color);
+    solid var(--border-color);
 }
 
 .input-8{
     border-right: var(--border-thickness) 
-      dashed var(--border-color);
+    solid var(--border-color);
 }

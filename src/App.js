@@ -1,16 +1,31 @@
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    Link
+  } from "react-router-dom";
+
 // Importing the required components
 import Board from './containers/Board';
+import Quiz from './containers/Quiz';
+import Header from "./components/Header";
+import Landing from "./containers/Landing";
 
 // Importing the CSS File
 import "./App.css";
-import Quiz from './containers/Quiz';
 
 function App() {
 
     return (
         <div className="App">
-            {/* <Board /> */}
-            <Quiz/>
+            <Router>
+                <Header/> 
+                <Routes>
+                    <Route path="/board" element={<Board />}/>
+                    <Route path="/quiz" element={<Quiz />}/>
+                    <Route path="/" element={<Landing />}/>
+                </Routes>
+            </Router>
         </div>
     );
 }

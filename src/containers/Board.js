@@ -1,9 +1,5 @@
-// Importing the CSS for the board
-import "./Board.css";
+import "./Board.scss";
 import { useSpeechSynthesis, useSpeechRecognition } from "react-speech-kit";
-// import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
-
-// Importing the useState hook, useEffect hook and useRef hook
 import { useState, useEffect, useRef } from "react";
 
 const Board = () => {
@@ -11,16 +7,13 @@ const Board = () => {
 
     const [value, setValue] = useState("");
     
-    // Creating a reset state, which indicates whether 
-    // the game should be reset or not
     const [reset, setReset] = useState(false);
 
-    // Creating a winner state, which indicates
-    // the current winner
     const [winner, setWinner] = useState('');
 
     const { listen, stop } = useSpeechRecognition({
         onResult: (result) => {
+            console.log(result)
             setValue(result);
         },
     });
@@ -195,7 +188,7 @@ const Board = () => {
         await speak({
             text: "Welcome to Tic Tac Toe, you can either click on the boxes or say the number of the box you want to click on. The boxes range from 1 to 9. Player 1 will go first",
         });
-        listen({ interimResults: false });
+        listen({ interimResults: true });
     };
 
     return (
