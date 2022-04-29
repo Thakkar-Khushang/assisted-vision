@@ -1,5 +1,14 @@
 # Assisted Vision
 
+## Steps to run the project:
+( In order to run this project on your local environment, you need to have node and npm installed )
+- git clone the repository
+- open the project on your system
+- run "npm i yarn"
+- run "yarn install"
+- let the dependencies install
+- run "yarn start"
+
 ## Steps to work on the project:
 ![image](https://user-images.githubusercontent.com/71427348/165894290-1f3715ab-3072-4513-98eb-c2c2832aa381.png)
 ### Landing Page
