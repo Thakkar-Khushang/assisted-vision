@@ -105,7 +105,7 @@ const Board = () => {
 
             // Setting the winner in case of a win
             if (checkWin()) {
-                setWinner(turn === 0 ? "Player 2 Wins!" : "Player 1 Wins!");
+                setWinner(turn === 0 ? "Player 1 Wins!" : "Player 2 Wins!");
             } else if (checkTie()) {
                 // Setting the winner to tie in case of a tie
                 setWinner("It's a Tie!");
@@ -189,7 +189,7 @@ const Board = () => {
         await speak({
             text: "Welcome to Tic Tac Toe, you can either click on the boxes or say the number of the box you want to click on. The boxes range from 1 to 9. Player 1 will go first",
         });
-        listen({ interimResults: true });
+        await listen({ interimResults: true });
     };
 
     return (

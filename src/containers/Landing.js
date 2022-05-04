@@ -30,7 +30,6 @@ const Landing = () => {
                     stop();
                 break;
             case "play game":
-                console.log("Wtf")
                     navigate('/board');
                     stop();
                 break;

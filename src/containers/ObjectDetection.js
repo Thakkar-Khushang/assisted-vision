@@ -1,12 +1,10 @@
 // Import dependencies
 import React, { useRef, useState, useEffect } from "react";
-import * as tf from "@tensorflow/tfjs";
 import * as cocossd from "@tensorflow-models/coco-ssd";
 import Webcam from "react-webcam";
 import "./ObjectDetection.scss"
 import { drawRect } from "../utilities/detection";
-import { useSpeechSynthesis, useSpeechRecognition } from "react-speech-kit";
-import LoadingOverlay from "react-loading-overlay";
+import { useSpeechSynthesis } from "react-speech-kit";
 
 const ObjectDetection = () => {
     const webcamRef = useRef(null);
@@ -17,38 +15,31 @@ const ObjectDetection = () => {
     // Main function
     const runCoco = async () => {
         const net = await cocossd.load();
-        console.log("Handpose model loaded.");
-        //  Loop and detect hands
+        console.log("Model loaded.");
         setInterval(() => {
             detect(net);
         }, 10);
     };
 
     const detect = async (net) => {
-        // Check data is available
         if (
             typeof webcamRef.current !== "undefined" &&
             webcamRef.current !== null &&
             webcamRef.current.video.readyState === 4
         ) {
             setLoading(false);
-            // Get Video Properties
             const video = webcamRef.current.video;
             const videoWidth = webcamRef.current.video.videoWidth;
             const videoHeight = webcamRef.current.video.videoHeight;
 
-            // Set video width
             webcamRef.current.video.width = videoWidth;
             webcamRef.current.video.height = videoHeight;
 
-            // Set canvas height and width
             canvasRef.current.width = videoWidth;
             canvasRef.current.height = videoHeight;
 
-            // Make Detections
             const obj = await net.detect(video);
 
-            // Draw mesh
             const ctx = canvasRef.current.getContext("2d");
             drawRect(obj, ctx, speak, speaking, cancel);
         }
@@ -57,12 +48,7 @@ const ObjectDetection = () => {
     useEffect(() => { runCoco() }, []);
 
     return (
-        <div className="ObjectDetection">
-            <LoadingOverlay
-                active={loading}
-                spinner
-                text='Loading your camera'
-            />
+        <div className="ObjectDetection">            
             <div className="webcam-div">
                 <Webcam
                     ref={webcamRef}
@@ -95,7 +81,9 @@ const ObjectDetection = () => {
                     }}
                 />
             </div>
-            {/* </LoadingOverlay> */}
+            {loading &&
+                <h3>Loading</h3>
+            }
         </div>
     );
 }
