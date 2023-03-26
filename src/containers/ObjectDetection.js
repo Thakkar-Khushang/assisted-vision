@@ -3,19 +3,47 @@ import React, { useRef, useState, useEffect } from "react";
 import * as tf from "@tensorflow/tfjs";
 import * as cocossd from "@tensorflow-models/coco-ssd";
 import Webcam from "react-webcam";
+import { useSpeechSynthesis, useSpeechRecognition } from "react-speech-kit";
 import "./ObjectDetection.scss";
 import { drawRect } from "../utilities/detection";
-import { useSpeechSynthesis } from "react-speech-kit";
+import { useNavigate } from "react-router-dom";
 
 const ObjectDetection = () => {
+  let navigate = useNavigate();
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   const { speak, speaking, cancel } = useSpeechSynthesis();
   const [loading, setLoading] = useState(true);
 
+  const [value, setValue] = useState("");
+  const [object, setObject] = useState("");
+
+  const { listen, stop } = useSpeechRecognition({
+    onResult: (result) => {
+      console.log(result);
+
+      switch (result) {
+        case "stop":
+        case "Stop":
+        case "stop.":
+        case "Stop.":
+          navigate(`/quiz/${object}`);
+          break;
+        default:
+          break;
+      }
+
+      setValue(result);
+    },
+  });
+
+  const initListening = async () => {
+    listen({ interimResults: true });
+  };
+
   // Main function
   const runCoco = async () => {
-    console.log("loading model...")
+    console.log("loading model...");
     const net = await cocossd.load();
     console.log("Model loaded.");
     setInterval(() => {
@@ -43,12 +71,13 @@ const ObjectDetection = () => {
       const obj = await net.detect(video);
 
       const ctx = canvasRef.current.getContext("2d");
-      drawRect(obj, ctx, speak, speaking, cancel);
+      setObject(drawRect(obj, ctx, speak, speaking, cancel));
     }
   };
 
   useEffect(() => {
     runCoco();
+    initListening();
   }, []);
 
   return (
@@ -85,6 +114,14 @@ const ObjectDetection = () => {
           }}
         />
       </div>
+      <button
+        onClick={() => {
+          initListening();
+        }}
+        className="Landing-button"
+      >
+        Give Command
+      </button>
       {loading && <h3>Loading</h3>}
     </div>
   );
