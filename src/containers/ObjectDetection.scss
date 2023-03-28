@@ -14,13 +14,16 @@
         width: 150px;
         margin: 0 auto;
       }
-      button{
+      .button-section{
+        display: flex;
         position: absolute;
         bottom: 0;
         // center it
         left: 50%;
         transform: translate(-50%, -50%);
-
+        button{
+          margin: 0 10px;
+        }
       }
       .detected{
         position: absolute;

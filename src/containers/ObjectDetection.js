@@ -45,6 +45,12 @@ const ObjectDetection = () => {
     );
   };
 
+  const moveToNextSection = () => {
+    stop();
+    clearInterval(intervalFunction);
+    navigate("/assessment/quiz", { state: { detected } });
+  }
+
   const detect = async (net) => {
     if (
       typeof webcamRef?.current !== "undefined" &&
@@ -89,9 +95,7 @@ const ObjectDetection = () => {
         speak({ text: detected.join(", "), queue: false });
         break;
       case "stop":
-        stop();
-        clearInterval(intervalFunction);
-        navigate("/assessment/quiz", { state: { detected } });
+        moveToNextSection();
         break;
       default:
         break;
@@ -140,14 +144,19 @@ const ObjectDetection = () => {
           ))}
         </p>
       </div>
-      <button
-        onClick={() => {
-          initListening();
-        }}
-        className="Landing-button"
-      >
-        Give Command
-      </button>
+      <div className="button-section">
+        <button
+          onClick={() => {
+            initListening();
+          }}
+          className="Landing-button"
+        >
+          Give Command
+        </button>
+        <button onClick={()=>{
+          moveToNextSection();
+        }}>Go to next section</button>
+      </div>
       {loading && <h3>Loading</h3>}
     </div>
   );
