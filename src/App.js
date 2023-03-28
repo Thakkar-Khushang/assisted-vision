@@ -17,12 +17,14 @@ function App() {
       <Router>
         <Header />
         <Routes>
-          <Route path="/ocr" element={<Ocr/>} />
-          <Route path="/assessment/object-detection" element={<ObjectDetection />} />
+          <Route path="/ocr" element={<Ocr />} />
+          <Route
+            path="/assessment/object-detection"
+            element={<ObjectDetection />}
+          />
           <Route path="/assessment/board" element={<Board />} />
-          <Route path="/assessment/quiz">
-            <Route path=":object" element={<Quiz />} />
-          </Route>
+          <Route path="/assessment/quiz" element={<Quiz />} />
+
           <Route path="/" element={<Landing />} />
         </Routes>
       </Router>

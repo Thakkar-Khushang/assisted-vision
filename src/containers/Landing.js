@@ -21,7 +21,7 @@ const Landing = () => {
     switch (value) {
       case "1":
       case "detect object":
-        navigate("/detection");
+        navigate("/assessment/object-detection");
         stop();
         break;
       case "give exam":

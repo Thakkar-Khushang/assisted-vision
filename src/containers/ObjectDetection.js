@@ -20,7 +20,6 @@ const ObjectDetection = () => {
   const [object, setObject] = useState("");
   const [detected, setDetected] = useState([]);
   const [intervalFunction, setIntervalFunction] = useState(0);
-  
 
   const { listen, stop } = useSpeechRecognition({
     onResult: (result) => {
@@ -39,21 +38,23 @@ const ObjectDetection = () => {
     console.log("loading model...");
     const net = await cocossd.load();
     console.log("Model loaded.");
-    setIntervalFunction(setInterval(() => {
-      detect(net);
-    }, 10));
+    setIntervalFunction(
+      setInterval(() => {
+        detect(net);
+      }, 10)
+    );
   };
 
   const detect = async (net) => {
     if (
-      typeof webcamRef.current !== "undefined" &&
-      webcamRef.current !== null &&
-      webcamRef.current.video.readyState === 4
+      typeof webcamRef?.current !== "undefined" &&
+      webcamRef?.current !== null &&
+      webcamRef?.current?.video?.readyState === 4
     ) {
       setLoading(false);
-      const video = webcamRef.current.video;
-      const videoWidth = webcamRef.current.video.videoWidth;
-      const videoHeight = webcamRef.current.video.videoHeight;
+      const video = webcamRef?.current?.video;
+      const videoWidth = webcamRef?.current?.video?.videoWidth;
+      const videoHeight = webcamRef?.current?.video?.videoHeight;
 
       webcamRef.current.video.width = videoWidth;
       webcamRef.current.video.height = videoHeight;
@@ -61,18 +62,18 @@ const ObjectDetection = () => {
       canvasRef.current.width = videoWidth;
       canvasRef.current.height = videoHeight;
 
-      const obj = await net.detect(video);
+      const obj = await net?.detect(video);
       var object;
-      if(obj.length > 0){
+      if (obj.length > 0) {
         object = obj[0].class;
         if (!detected.includes(object) && allowedObjects.includes(object)) {
           detected.push(object);
           setDetected(detected);
-      }
+        }
       }
 
       const ctx = canvasRef.current.getContext("2d");
-      if(allowedObjects.includes(object)){
+      if (allowedObjects.includes(object)) {
         setObject(drawRect(obj, ctx, speak, speaking, cancel));
       }
     }
@@ -84,12 +85,13 @@ const ObjectDetection = () => {
 
   useEffect(() => {
     switch (value) {
-      case 'read detected objects':
-        speak({ text: detected.join(', '), queue: false });
+      case "read detected objects":
+        speak({ text: detected.join(", "), queue: false });
         break;
-      case 'stop':
+      case "stop":
         stop();
         clearInterval(intervalFunction);
+        navigate("/assessment/quiz", { state: { detected } });
         break;
       default:
         break;

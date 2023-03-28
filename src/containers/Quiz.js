@@ -1,12 +1,22 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useSpeechSynthesis, useSpeechRecognition } from "react-speech-kit";
-import questions from "./questions.js";
+import parentQuestions from "./questions.js";
 import "./Quiz.scss";
 
 const Quiz = () => {
   // get the object param from the url
-  const { object } = useParams();
+
+  const location = useLocation();
+  const detected = location?.state?.detected;
+
+  const [questions, setQuestions] = useState([
+    {
+      question: "How many hands does a person have?",
+      options: ["1", "2", "3", "4"],
+      answer: "2",
+    },
+  ]);
 
   const [question, setQuestion] = useState(0);
   const [value, setValue] = useState("");
@@ -23,7 +33,7 @@ const Quiz = () => {
 
   const selectAnswer = async (i) => {
     let arr = [...selected];
-    let option = questions[object][question].options[i];
+    let option = questions[question].options[i];
     arr[question] = option;
     await speak({ text: "Selected " + option, queue: false });
     setSelected(arr);
@@ -38,13 +48,31 @@ const Quiz = () => {
 
   const readQuestionAndOptions = async () => {
     await speak({ text: "current question: ", queue: true });
-    await speak({ text: questions[object][question].question, queue: true });
+    await speak({ text: questions[question].question, queue: true });
     return;
   };
 
   useEffect(() => {
+    const tempQuestions = [];
+
+    for (let i = 0; i < detected.length; i++) {
+      const object = detected[i];
+      tempQuestions.push(...parentQuestions[object]);
+    }
+
+    for (let i = tempQuestions.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const temp = tempQuestions[i];
+      tempQuestions[i] = tempQuestions[j];
+      tempQuestions[j] = temp;
+    }
+
+    tempQuestions.length = 4;
+
+    setQuestions(tempQuestions);
+
     let arr = [];
-    for (let i = 0; i < questions[object].length; i++) {
+    for (let i = 0; i < tempQuestions.length; i++) {
       arr.push("");
     }
     setSelected(arr);
@@ -53,11 +81,11 @@ const Quiz = () => {
   useEffect(() => {
     switch (value) {
       case "read question":
-        speak({ text: questions[object][question].question, queue: false });
+        speak({ text: questions[question].question, queue: false });
         break;
 
       case "read options":
-        speak({ text: questions[object][question].options, queue: false });
+        speak({ text: questions[question].options, queue: false });
         break;
 
       case "next question":
@@ -69,19 +97,19 @@ const Quiz = () => {
         break;
 
       case "read option 1":
-        speak({ text: questions[object][question].options[0], queue: false });
+        speak({ text: questions[question].options[0], queue: false });
         break;
 
       case "read option 2":
-        speak({ text: questions[object][question].options[1], queue: false });
+        speak({ text: questions[question].options[1], queue: false });
         break;
 
       case "read option 3":
-        speak({ text: questions[object][question].options[2], queue: false });
+        speak({ text: questions[question].options[2], queue: false });
         break;
 
       case "read option 4":
-        speak({ text: questions[object][question].options[3], queue: false });
+        speak({ text: questions[question].options[3], queue: false });
         break;
 
       case "select option 1":
@@ -112,7 +140,7 @@ const Quiz = () => {
         for (let i = 0; i < selected.length; i++) {
           const option = selected[i];
           speak({
-            text: "Question: " + questions[object][i].question,
+            text: "Question: " + questions[i].question,
             queue: true,
           });
           speak({
@@ -140,7 +168,7 @@ const Quiz = () => {
   }, [question]);
 
   const changeQuestion = (where) => {
-    if (where === "next" && question < questions[object].length - 1) {
+    if (where === "next" && question < questions.length - 1) {
       setQuestion(question + 1);
     } else if (where === "prev" && question > 0) {
       setQuestion(question - 1);
@@ -151,9 +179,9 @@ const Quiz = () => {
     <div className="Quiz">
       <h1>Quiz</h1>
       <div className="question-section">
-        <p className="question"> {questions[object][question].question}</p>
+        <p className="question"> {questions[question].question}</p>
         <div className="options">
-          {questions[object][question].options.map((option, i) => {
+          {questions[question].options.map((option, i) => {
             return (
               <button
                 className={`option ${
