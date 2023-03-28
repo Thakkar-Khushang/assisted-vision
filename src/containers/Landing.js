@@ -62,7 +62,7 @@ const Landing = () => {
           >
             Give Command
           </button>
-          <h6>like detect object</h6>
+          <h6>like "give assessment"</h6>
         </div>
         <div className="right-container">
           <img
