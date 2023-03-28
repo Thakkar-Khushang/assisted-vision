@@ -56,7 +56,8 @@ const Quiz = () => {
     const tempQuestions = [];
 
     for (let i = 0; i < detected.length; i++) {
-      const object = detected[i];
+      let object = detected[i];
+      object = object.replace(/\s/g, "_");
       tempQuestions.push(...parentQuestions[object]);
     }
 
