@@ -20,16 +20,12 @@ const Landing = () => {
   useEffect(() => {
     switch (value) {
       case "1":
-      case "detect object":
+      case "give assessment":
         navigate("/assessment/object-detection");
         stop();
         break;
-      case "give exam":
-        navigate("/quiz");
-        stop();
-        break;
-      case "play game":
-        navigate("/board");
+      case "scan document":
+        navigate("/ocr");
         stop();
         break;
       case "stop":
