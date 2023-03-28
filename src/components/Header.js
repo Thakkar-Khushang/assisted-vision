@@ -12,8 +12,8 @@ const Header = () => {
 
       <nav>
         <Link to="/">Home</Link>
-
-        <Link to="/detection">Detect Object</Link>
+        <Link to="/assessment/object-detection">Assessment</Link>
+        <Link to="/ocr">Handwriting Detection</Link>
       </nav>
     </header>
   );

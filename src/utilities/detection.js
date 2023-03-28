@@ -12,13 +12,7 @@ const speak = (message) => {
 
 export const drawRect = (detections, ctx) => {
   const prediction = detections[0];
-  if (
-    prediction &&
-    (prediction["class"] === "person" ||
-      prediction["class"] === "cell phone" ||
-      prediction["class"] === "apple" ||
-      prediction["class"] === "cat")
-  ) {
+  
     const [x, y, width, height] = prediction["bbox"];
     const text = prediction["class"];
     if (saidText !== text) {
@@ -35,10 +29,6 @@ export const drawRect = (detections, ctx) => {
     ctx.rect(x, y, width, height);
     ctx.stroke();
 
-    if (prediction["class"] === "cell phone") {
-      return "cell_phone";
-    }
-
     return text;
-  }
+  
 };

@@ -14,31 +14,24 @@ const ObjectDetection = () => {
   const canvasRef = useRef(null);
   const { speak, speaking, cancel } = useSpeechSynthesis();
   const [loading, setLoading] = useState(true);
+  const allowedObjects = ["person", "cell phone", "apple", "cat", "bottle"];
 
   const [value, setValue] = useState("");
   const [object, setObject] = useState("");
+  const [detected, setDetected] = useState([]);
+  const [intervalFunction, setIntervalFunction] = useState(0);
+  
 
   const { listen, stop } = useSpeechRecognition({
     onResult: (result) => {
       console.log(result);
-
-      switch (result) {
-        case "stop":
-        case "Stop":
-        case "stop.":
-        case "Stop.":
-          navigate(`/quiz/${object}`);
-          break;
-        default:
-          break;
-      }
-
       setValue(result);
     },
   });
 
   const initListening = async () => {
-    listen({ interimResults: true });
+    speak({ text: "We are listening to you", queue: false });
+    listen();
   };
 
   // Main function
@@ -46,9 +39,9 @@ const ObjectDetection = () => {
     console.log("loading model...");
     const net = await cocossd.load();
     console.log("Model loaded.");
-    setInterval(() => {
+    setIntervalFunction(setInterval(() => {
       detect(net);
-    }, 10);
+    }, 10));
   };
 
   const detect = async (net) => {
@@ -69,16 +62,39 @@ const ObjectDetection = () => {
       canvasRef.current.height = videoHeight;
 
       const obj = await net.detect(video);
+      var object;
+      if(obj.length > 0){
+        object = obj[0].class;
+        if (!detected.includes(object) && allowedObjects.includes(object)) {
+          detected.push(object);
+          setDetected(detected);
+      }
+      }
 
       const ctx = canvasRef.current.getContext("2d");
-      setObject(drawRect(obj, ctx, speak, speaking, cancel));
+      if(allowedObjects.includes(object)){
+        setObject(drawRect(obj, ctx, speak, speaking, cancel));
+      }
     }
   };
 
   useEffect(() => {
     runCoco();
-    initListening();
   }, []);
+
+  useEffect(() => {
+    switch (value) {
+      case 'read detected objects':
+        speak({ text: detected.join(', '), queue: false });
+        break;
+      case 'stop':
+        stop();
+        clearInterval(intervalFunction);
+        break;
+      default:
+        break;
+    }
+  }, [value]);
 
   return (
     <div className="ObjectDetection">
@@ -113,6 +129,14 @@ const ObjectDetection = () => {
             height: 480,
           }}
         />
+      </div>
+      <div className="detected">
+        <h4>Detected Items:</h4>
+        <p>
+          {detected.map((item, index) => (
+            <span key={index}>{item}, </span>
+          ))}
+        </p>
       </div>
       <button
         onClick={() => {
