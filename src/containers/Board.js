@@ -209,9 +209,9 @@ const Board = () => {
 
   const initGame = async () => {
     await speak({
-      text: "Welcome to Tic Tac Toe, you can either click on the boxes or say the number of the box you want to click on. The boxes range from 1 to 9. Player 1 will go first",
+      text: " you can either click on the boxes or say the number of the box you want to click on. The boxes range from 1 to 9. Player 1 will go first",
     });
-    await listen({ interimResults: true });
+    listen();
   };
 
   return (
