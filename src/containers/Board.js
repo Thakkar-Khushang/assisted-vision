@@ -24,6 +24,18 @@ const Board = () => {
     },
   });
 
+  const calculateGrade = () => {
+    if (quizScore == 4 && repeatedMove == 0) {
+      speak({ text: "Congratulations! You've been awarded an A Grade" });
+    } else if (quizScore == 3 && repeatedMove <= 1) {
+      speak({ text: "Congratulations! You've been awarded a B Grade" });
+    } else if (quizScore > 0) {
+      speak({ text: "Congratulations! You've passed the quiz" });
+    } else {
+      speak({ text: "Better luck next time" });
+    }
+  };
+
   useEffect(() => {
     switch (value) {
       case "1":
@@ -113,9 +125,11 @@ const Board = () => {
       // Setting the winner in case of a win
       if (checkWin()) {
         setWinner(turn === 0 ? "Player 1 Wins!" : "Player 2 Wins!");
+        calculateGrade();
       } else if (checkTie()) {
         // Setting the winner to tie in case of a tie
         setWinner("It's a Tie!");
+        calculateGrade();
       } else {
         // Switching the turn
         setTurn(turn == 0 ? 1 : 0);
