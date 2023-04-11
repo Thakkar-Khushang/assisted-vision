@@ -21,7 +21,7 @@ const Landing = () => {
     switch (value) {
       case "1":
       case "give assessment":
-        navigate("/assessment/object-detection");
+        navigate("/assessment");
         stop();
         break;
       case "scan document":
