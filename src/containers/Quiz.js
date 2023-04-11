@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSpeechSynthesis, useSpeechRecognition } from "react-speech-kit";
 import parentQuestions from "./questions.js";
 import "./Quiz.scss";
@@ -8,6 +8,7 @@ const Quiz = () => {
   // get the object param from the url
 
   const location = useLocation();
+  const navigate = useNavigate();
   const detected = location?.state?.detected;
 
   const [questions, setQuestions] = useState([
@@ -21,7 +22,7 @@ const Quiz = () => {
   const [question, setQuestion] = useState(0);
   const [value, setValue] = useState("");
   const [selected, setSelected] = useState([]);
-
+  const [score, setScore] = useState(0);
   const { speak, speaking, cancel } = useSpeechSynthesis();
 
   const { listen, stop } = useSpeechRecognition({
@@ -34,7 +35,11 @@ const Quiz = () => {
   const selectAnswer = async (i) => {
     let arr = [...selected];
     let option = questions[question].options[i];
+
     arr[question] = option;
+
+    if (option === questions[question].answer) setScore(score + 1);
+
     await speak({ text: "Selected " + option, queue: false });
     setSelected(arr);
   };
@@ -175,6 +180,12 @@ const Quiz = () => {
       setQuestion(question + 1);
     } else if (where === "prev" && question > 0) {
       setQuestion(question - 1);
+    } else if (where === "next" && question === questions.length - 1) {
+      speak({
+        text: `You have completed the quiz, your score is ${score}`,
+        queue: false,
+      });
+      navigate("/assessment/board", { state: { score } });
     }
   };
 
