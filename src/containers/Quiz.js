@@ -181,6 +181,7 @@ const Quiz = () => {
     } else if (where === "prev" && question > 0) {
       setQuestion(question - 1);
     } else if (where === "next" && question === questions.length - 1) {
+      stop();
       speak({
         text: `You have completed the quiz, your score is ${score}`,
         queue: false,
