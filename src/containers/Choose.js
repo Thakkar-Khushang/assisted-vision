@@ -18,11 +18,13 @@ const Choose = () =>{
     useEffect(() => {
         if(value === "object detector"){
             speak({ text: "You have chosen object detector", queue: false });
+            stop();
             navigate("/assessment/object-detection");
 
         }
         else if(value === "handwriting recognizer"|| value == "handwriting recogniser"){
             speak({ text: "You have chosen handwriting recognizer", queue: false });
+            stop();
             navigate("/assessment/ocr");
         }
     }, [value])
@@ -31,8 +33,16 @@ const Choose = () =>{
         <div className="Choose">
             <h3>Take your pick</h3>
             <div>
-            <Link to="/assessment/object-detection"><button>Object Detector</button></Link>
-            <Link to="/assessment/ocr"><button>Handwriting recognizer</button></Link>
+            <button onClick={()=>{
+                speak({ text: "You have chosen object detector", queue: false });
+                stop();
+                navigate("/assessment/object-detection");
+            }}>Object Detector</button>
+            <button onClick={()=>{
+                speak({ text: "You have chosen object detector", queue: false });
+                stop();
+                navigate("/assessment/ocr");
+            }}>Handwriting recognizer</button>
             </div>
             <button className="voice-button" onClick={()=>{
                 speak({ text: "Choose object detector or handwriting recognizer", queue: false });
