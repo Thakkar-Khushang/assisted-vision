@@ -12,8 +12,7 @@ const Header = () => {
 
       <nav>
         <Link to="/">Home</Link>
-        <Link to="/assessment/object-detection">Assessment</Link>
-        <Link to="/ocr">Handwriting Detection</Link>
+        <Link to="/assessment">Assessment</Link>
       </nav>
     </header>
   );

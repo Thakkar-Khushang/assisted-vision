@@ -1,15 +1,21 @@
 import React,{useState, useEffect} from "react";
 import { DetectDocumentTextCommand, TextractClient } from "@aws-sdk/client-textract";
 import { useSpeechSynthesis } from "react-speech-kit";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { Buffer } from "buffer";
 
 import './Ocr.scss';
 
 const Ocr = () => {
+    const navigate = useNavigate();
+    const objects = ["person", "cell phone", "apple", "cat", "bottle"];
     const [imageUrl, setImageUrl] = useState(null);
     const [src, setSrc] = useState("");
     const [data, setData] = useState([]);
+    const [uniqueData, setUniqueData] = useState([])
+    const [detected, setDetected] = useState([]);
     const [loading, setLoading] = useState(false);
     const { speak, speaking, cancel } = useSpeechSynthesis();
 
@@ -65,13 +71,40 @@ const Ocr = () => {
     };
 
     useEffect(() => {
+        var matchedObjects = []
         if (data?.length > 0) {
+            const spokenWords = [];
             speak({ text: "We are reading the text", queue: false });
-            data?.map((item, index) => {
+            data?.map((item) => {
                 if (item.Text) {
-                    speak({ text: item.Text, queue: true });
+                    if(item.Text.split(" ").length > 1){
+                        item.Text.split(" ").map((word) => {
+                            if (objects.includes(word.toLowerCase())) {
+                                if(!matchedObjects.includes(word.toLowerCase()))
+                                matchedObjects.push(word.toLowerCase());
+                            }
+                            if(!spokenWords.includes(word.toLowerCase())) {
+                                speak({ text: word, queue: true });
+                                spokenWords.push(word.toLowerCase());
+                                setUniqueData(spokenWords);
+                            }
+                        })
+                    } else{
+                        if (objects.includes(item.Text.toLowerCase())) {
+                            if(!matchedObjects.includes(item.Text.toLowerCase()))
+                            matchedObjects.push(item.Text.toLowerCase());
+                        }
+                        if(!spokenWords.includes(item.Text.toLowerCase())){
+                            speak({ text: item.Text, queue: true });
+                            spokenWords.push(item.Text.toLowerCase());
+                            setUniqueData(spokenWords);
+                        }
+                    }
                 }
             });
+        }
+        if(matchedObjects.length > 0){
+            setDetected(matchedObjects);
         }
     }, [data]);
 
@@ -97,17 +130,29 @@ const Ocr = () => {
             }
             <div className="result">
                 {loading && <span>Loading...</span>}
-                {!loading && data?.length === 0 && <span>No data</span>}
-                {!loading && data?.length > 0 && <span className="result-title">Result:</span>}
-                {data?.map((item, index) => {
+                {!loading && uniqueData.length === 0 && <span>No data</span>}
+                {!loading && uniqueData.length > 0 && <span className="result-title">Result:</span>}
+                {uniqueData.map((item, index) => {
                     return (
                         <span key={index} style={{ margin: "2px", padding: "2px" }}>
-                            {item.Text}
+                            {uniqueData[index]}
                         </span>
                     );
                     }
                 )}
-                </div>
+            </div>
+            <div className="matched">
+                    <p>Matched Objects: {detected?.map((item, index) => {
+                        return (
+                            <span key={index} style={{ margin: "2px", padding: "2px" }}>
+                                {item} 
+                            </span>
+                        );
+                    })}</p>
+            </div>
+            {detected.length > 0 && <button onClick={()=>{
+                navigate("/assessment/quiz", { state: { detected } });
+            }}>Move to quiz</button>}
         </div>
     );
 }

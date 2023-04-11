@@ -10,6 +10,7 @@ import ObjectDetection from "./containers/ObjectDetection";
 // Importing the CSS File
 import "./App.css";
 import Ocr from "./containers/Ocr";
+import Choose from "./containers/Choose";
 
 function App() {
   return (
@@ -17,10 +18,11 @@ function App() {
       <Router>
         <Header />
         <Routes>
-          <Route path="/ocr" element={<Ocr />} />
+          <Route path="/assessment/ocr" element={<Ocr />} />
           <Route path="/assessment/object-detection" element={<ObjectDetection />}/>
           <Route path="/assessment/board" element={<Board />} />
           <Route path="/assessment/quiz" element={<Quiz />} />
+          <Route path="/assessment" element={<Choose />}/>
           <Route path="/" element={<Landing />} />
         </Routes>
       </Router>

@@ -14,7 +14,7 @@ const ObjectDetection = () => {
   const canvasRef = useRef(null);
   const { speak, speaking, cancel } = useSpeechSynthesis();
   const [loading, setLoading] = useState(true);
-  const allowedObjects = ["person", "cell phone", "apple", "cat", "bottle"];
+  const objects = ["person", "cell phone", "apple", "cat", "bottle"];
 
   const [value, setValue] = useState("");
   const [object, setObject] = useState("");
@@ -70,16 +70,17 @@ const ObjectDetection = () => {
 
       const obj = await net?.detect(video);
       var object;
+      
       if (obj.length > 0) {
         object = obj[0].class;
-        if (!detected.includes(object) && allowedObjects.includes(object)) {
+        if (!detected.includes(object) && objects.includes(object)) {
           detected.push(object);
           setDetected(detected);
         }
       }
 
       const ctx = canvasRef.current.getContext("2d");
-      if (allowedObjects.includes(object)) {
+      if (objects.includes(object)) {
         setObject(drawRect(obj, ctx, speak, speaking, cancel));
       }
     }

@@ -86,7 +86,9 @@ const Quiz = () => {
         break;
 
       case "read options":
-        speak({ text: questions[question].options, queue: false });
+        for(let i=0;i<questions[question].options.length;i++){
+          speak({ text: questions[question].options[i], queue: true });
+        }
         break;
 
       case "next question":
@@ -132,7 +134,7 @@ const Quiz = () => {
       case "read selected option":
         const option = selected[question];
         speak({
-          text: option != "" ? option : "No option selected",
+          text: option !== "" ? option : "No option selected",
           queue: false,
         });
         break;
@@ -146,7 +148,7 @@ const Quiz = () => {
           });
           speak({
             text:
-              option != ""
+              option !== ""
                 ? "Option selected: " + option
                 : "No option selected",
             queue: true,
