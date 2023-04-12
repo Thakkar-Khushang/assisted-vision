@@ -27,12 +27,16 @@ const Board = () => {
   const calculateGrade = () => {
     if (quizScore == 4 && repeatedMove == 0) {
       speak({ text: "Congratulations! You've been awarded an A Grade" });
+      return "Congratulations! You've been awarded an A Grade"
     } else if (quizScore == 3 && repeatedMove <= 1) {
       speak({ text: "Congratulations! You've been awarded a B Grade" });
+      return "Congratulations! You've been awarded a B Grade"
     } else if (quizScore > 0) {
       speak({ text: "Congratulations! You've passed the quiz" });
+      return "Congratulations! You've passed the quiz"
     } else {
       speak({ text: "Better luck next time" });
+      return "Better luck next time"
     }
   };
 
@@ -79,6 +83,7 @@ const Board = () => {
         speak({ text: "Stopping" });
         break;
       case "reset":
+        setRepeatedMove(0);
         setReset(true);
         break;
       default:
@@ -124,12 +129,12 @@ const Board = () => {
 
       // Setting the winner in case of a win
       if (checkWin()) {
-        setWinner(turn === 0 ? "Player 1 Wins!" : "Player 2 Wins!");
-        calculateGrade();
+        var msg = calculateGrade();
+        setWinner(turn === 0 ? "Player 1 Wins! \n"+msg : "Player 2 Wins! \n"+msg);
       } else if (checkTie()) {
+        var msg = calculateGrade();
         // Setting the winner to tie in case of a tie
-        setWinner("It's a Tie!");
-        calculateGrade();
+        setWinner("It's a Tie! \n"+msg);
       } else {
         // Switching the turn
         setTurn(turn == 0 ? 1 : 0);
@@ -219,8 +224,14 @@ const Board = () => {
       <div className={`winner ${winner !== "" ? "" : "shrink"}`}>
         {/* Display the current winner */}
         <div className="winner-text">{winner}</div>
+        {(quizScore !== 0 && quizScore !=null) && <div>Quiz Score: {quizScore}</div>}
+        {repeatedMove !== null && <div>Invalid Moves: {repeatedMove}</div>}
+
         {/* Button used to reset the board */}
-        <button onClick={() => setReset(true)}>Reset Board</button>
+        <button onClick={() => {
+          setRepeatedMove(0);
+          setReset(true)
+        }}>Reset Board</button>
       </div>
       <div ref={boardRef} className="board">
         <div className="input input-1" onClick={() => draw(1)}></div>
