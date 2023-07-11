@@ -13,8 +13,6 @@
 
 ## Steps to work on the project:
 
-![image](https://user-images.githubusercontent.com/71427348/165894290-1f3715ab-3072-4513-98eb-c2c2832aa381.png)
-
 ### Landing Page
 
 We can navigate to object detection, quiz or game page via the navbar
